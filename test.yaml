@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+    mysql:
+        image: mysql:8.3
+        environment:
+          MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-rootpassword}"
+          MYSQL_DATABASE: "${DB_DATABASE:-laravel_db}"
+          MYSQL_USER: "${DB_USER:-laravel_user}"
+          MYSQL_PASSWORD: "${DB_PASSWORD:-laravel_pass}"
+        volumes:
+          - mysql_data:/var/lib/mysql
+        healthcheck:
+          test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER:-laravel_user}", "--password=${DB_PASSWORD:-laravel_pass}" ]
+          interval: 5s
+          retries: 10
+          timeout: 2s
+volumes:
+  mysql_data:
